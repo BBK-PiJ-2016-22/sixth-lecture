@@ -1,12 +1,12 @@
-public class HospitalManager{
+public class Hospital{
 
 	private Patient header;
 
 	public static void main (String[] args){
 		
-		HospitalManager myManager = new HospitalManager();
+		Hospital myHospital = new Hospital();
 			
-		myManager.Launch();	
+		myHospital.Launch();	
 	
 	}
 	
@@ -18,44 +18,41 @@ public class HospitalManager{
 		
 		header = firstPatient;
 		
-		
 		Patient secondPatient = new Patient("Harald", 43, "Polio");
 		addPatient(secondPatient);
-		
+	
 		Patient thirdPatient = new Patient("Eric", 32, "OD");
 		addPatient(thirdPatient);
-		
+			
 		Patient fourthPatient = new Patient("Jerry", 22, "Small Pox");
 		addPatient(fourthPatient);
 		
 		Patient fifthPatient = new Patient("Peter",113, "Bronchitis");
 		addPatient(fifthPatient);
 		
-		Patient sixthPatient = new Patient("Mongi", 32, "Anaphylatic Shock");
+		Patient sixthPatient = new Patient("Mongi", 32, "Anaphylactic Shock");
 		addPatient(sixthPatient);
 		
 		Patient seventhPatient = new Patient("Poul", 22, "Cancer");
 		addPatient(seventhPatient);
 		
-		printPatients();
 		
-		boolean deleted = deletePatient(seventhPatient);
-		
-		if(deleted == true){
-			System.out.println(seventhPatient.getName() + " was deleted");
-			System.out.println();
-		}else{
-			System.out.println("Couldn't delete patient");
-			System.out.println();
-			
-		}
+		printPatientsFowards();
+
+		printPatientsBackwards();
 		
 		
-		printPatients();
+		deletePatient(firstPatient);
 		
-		int listLength = listCounter();
+		deletePatient(fourthPatient);
 		
-		System.out.println(listLength);
+		
+		printPatientsFowards();
+		
+		printPatientsBackwards();
+
+		
+		
 		
 		
 
@@ -78,13 +75,13 @@ public class HospitalManager{
 			}
 			
 			pointer.setNextPatient(newPatient); 
-		
+			pointer.getNextPatient().setPreviousPatient(pointer);
 		}
 	
 	}
 
 	
-	public void printPatients(){
+	public void printPatientsFowards(){
     	
     	Patient pointer = header; 
     	
@@ -118,11 +115,42 @@ public class HospitalManager{
     		}
     	
     	}	
-    	
-    	
+    		
     }	
 
-
+	public void printPatientsBackwards(){
+    	
+    	Patient pointer = header; 
+    	
+    	if(header == null){
+    		System.out.println("List is Empty");
+    		return;
+    	}
+    	
+    	while(pointer.getNextPatient() != null ){
+    	
+    		pointer = pointer.getNextPatient();
+    	
+    	}	
+    	
+			System.out.println("Patient name: " + pointer.getName());
+    		System.out.println("Age: " + pointer.getAge());
+    		System.out.println("Illness: " + pointer.getIllness());
+    		System.out.println();
+			
+			while(pointer.getPreviousPatient() != null){
+			
+				pointer = pointer.getPreviousPatient();
+				System.out.println("Patient name: " + pointer.getName());
+    			System.out.println("Age: " + pointer.getAge());
+    			System.out.println("Illness: " + pointer.getIllness());
+    			System.out.println();
+				
+			}    	
+    	
+    	   	
+    }	
+	
 
 	
 	public boolean deletePatient(Patient delete){
@@ -137,6 +165,7 @@ public class HospitalManager{
 		}else if(delete.getName().equals(pointer.getName()) ){
 			
 			header = pointer.getNextPatient();
+			pointer.getNextPatient().setPreviousPatient(null);
 			pointer.setNextPatient(null);
 			return true;
 			
@@ -149,39 +178,20 @@ public class HospitalManager{
 			
 			}
 			
-			if(pointer == null){
 			
-				return false;
+			if(pointer.getNextPatient().getNextPatient() == null){
+				pointer.getNextPatient().setPreviousPatient(null);
+				pointer.setNextPatient(null);
+				
+				return true;
 			
 			}else{
-				
+			
+				pointer.getNextPatient().getNextPatient().setPreviousPatient(pointer);	
 				pointer.setNextPatient(pointer.getNextPatient().getNextPatient());
 				return true;
 							
 			}		
 		}		       
-    }
-	
-
-	
-	private int listCounter(){
-		int counter = 0;
-		
-		Patient countThisPatient = header;
-		Patient nextPatient;
-		
-		do {
-			
-			nextPatient = countThisPatient.getNextPatient();
-			countThisPatient = nextPatient;
-			counter += 1;
-		} while (nextPatient != null); 
-		
-	
-		return counter; 
-	
-
-	}
-
-
+    } 
 }	

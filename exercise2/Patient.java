@@ -6,7 +6,6 @@ public class Patient{
 	private Patient nextPatient;
 	
 	Patient(String name, int age, String illness){
-		System.out.println("you are now in constructor");	
 
 		this.name = name;
 		this.age = age;

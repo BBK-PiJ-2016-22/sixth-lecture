@@ -1,6 +1,6 @@
 public class HospitalManager{
 
-	private Patient listStart;
+	private Patient header;
 
 	public static void main (String[] args){
 		
@@ -14,114 +14,145 @@ public class HospitalManager{
 
 	public void Launch(){
 		
-		//create first element
-		Patient firstPatient = new Patient("Poul", 34, "Lyme Disease");
+		Patient firstPatient = new Patient("Jim", 34, "very sick");
+		
+		header = firstPatient;
 		
 		
-		// variable storing start of list
-		listStart = firstPatient;
-		System.out.println(listStart);
-		System.out.println(firstPatient);
-		 
+		Patient secondPatient = new Patient("Harald", 43, "Polio");
+		addPatient(secondPatient);
 		
+		Patient thirdPatient = new Patient("Eric", 32, "OD");
+		addPatient(thirdPatient);
 		
-		// create second element
-		Patient secondPatient = new Patient("John", 43, "AIDS");
+		Patient fourthPatient = new Patient("Jerry", 22, "Small Pox");
+		addPatient(fourthPatient);
 		
+		Patient fifthPatient = new Patient("Peter",113, "Bronchitis");
+		addPatient(fifthPatient);
 		
-		// linking second element to first element		
-		firstPatient.setNextPatient(secondPatient);
+		Patient sixthPatient = new Patient("Mongi", 32, "Anaphylatic Shock");
+		addPatient(sixthPatient);
 		
-		
-		
-		//creating third element
-		Patient thirdPatient = new Patient("Jim", 55, "Cancer");
-		
-		
-		//linking third element to third element
-		secondPatient.setNextPatient(thirdPatient);	
-		
-		// create and add fourthPatient
-		Patient FourthPatient = new Patient("Peter", 23, "Stomach Cramps"); 
-		 
-		addPatient(FourthPatient);
-		
-		System.out.println(FourthPatient);
-		System.out.println(thirdPatient.getNextPatient());
+		Patient seventhPatient = new Patient("Poul", 22, "Cancer");
+		addPatient(seventhPatient);
 		
 		printPatients();
 		
-		deletePatient(secondPatient);
-			
+		deletePatient(seventhPatient);
+		
 		printPatients();
+		
+		
 
 	}
 	
 	public void addPatient(Patient newPatient){
-		Patient pointer = listStart;
 		
-		/* tells whether the list is empty or not and 
-		then sets first element to newPatient */
-		if(pointer == null){
+		Patient pointer = header;
+		// if the list is empty
+		if(header == null){
+			
+			header = newPatient;	
 		
-			pointer = newPatient;
+		} else if (header != null){
+		
+			while(pointer.getNextPatient() != null){
+				
+				pointer = pointer.getNextPatient();
 			
-		} else {
+			}
 			
-			while (pointer.getNextPatient() != null){
-                // firstPatient.getNextPatient() = secondPatient
-                // pointer = secondPatient
-                // secondPatient.getNextPatient() = thirdPatient
-                // thirdPatient.getNextPatient() = null.
-                pointer = pointer.getNextPatient();
-            }
-            // thirdPatient.setNextPatient(fourthPatient)
-            pointer.setNextPatient(newPatient);
+			pointer.setNextPatient(newPatient); 
 		
 		}
 	
 	}
+
 	
-	public boolean deletePatient(Patient patient) {
-        Patient pointer = listStart;
-        if (pointer == null){
-            // patient not present as list empty
-            return false;
+	public void printPatients(){
+    	
+    	Patient pointer = header; 
+    	
+    	if(header == null){
+    		System.out.println("List is Empty");
+    	
+    	}else if (header != null && pointer.getNextPatient() == null){
+    	
+    		System.out.println("Patient name: " + pointer.getName());
+    		System.out.println("Age: " + pointer.getAge());
+    		System.out.println("Illness: " + pointer.getIllness());
+    		System.out.println();
+
+    	
+    	}else if (header != null && pointer.getNextPatient() != null){
+    		
+    		System.out.println("Patient name: " + pointer.getName());
+    		System.out.println("Age: " + pointer.getAge());
+    		System.out.println("Illness: " + pointer.getIllness());
+    		System.out.println();
+
+    		
+    		while(pointer.getNextPatient() != null){
+    			
+    			pointer = pointer.getNextPatient();
+
+    			System.out.println("Patient name: " + pointer.getName());
+    			System.out.println("Age: " + pointer.getAge());
+    			System.out.println("Illness: " + pointer.getIllness());
+    			System.out.println();
+    		}
+    	
+    	}	
+    	
+    	
+    }	
+
+
+
+	
+	public boolean deletePatient(Patient delete){
         
-        } else {
-            
-            if (pointer.getName().equals(patient.getName())){
-                // first element is the patient we wish to delete
-                listStart = pointer.getNextPatient();
-                return true;
-            } else {
-                // look down the rest of the list
-                while (pointer.getNextPatient().getName()!= patient.getName() && pointer != null){
-                    pointer = pointer.getNextPatient();
-            	}
-            }
-                
-            if (pointer== null){
-                
-                return false;
-            
-            } else {
-                    pointer.setNextPatient(pointer.getNextPatient().getNextPatient());
-                    return true;
-                }           
-        }
+        Patient pointer = header;
+		
+		if(pointer == null){
+			
+			System.out.println("List is empty");
+			return false; 
+		
+		}else if(delete.getName().equals(pointer.getName()) ){
+			
+			header = pointer.getNextPatient();
+			pointer.setNextPatient(null);
+			return true;
+			
+			 
+		}else{
+		
+			while(pointer.getNextPatient().getName() != delete.getName() && pointer != null){
+				
+				pointer = pointer.getNextPatient();
+			
+			}
+			
+			if(pointer == null){
+			
+				return false;
+			
+			}else{
+				
+				pointer.setNextPatient(pointer.getNextPatient().getNextPatient());
+				return true;	
+			
+			}		
+		}
+		
+		
+		       
     }
 	
-	
-	private void printPatients() {
-        Patient printThisPatient = listStart;
-        Patient nextPatient;
-        do {
-            System.out.println("NAME: " + printThisPatient.getName() +
-                    "\t AGE: " + printThisPatient.getAge() +
-                    "\tILLNESS: " + printThisPatient.getIllness());
-            nextPatient = printThisPatient.getNextPatient();
-            printThisPatient = nextPatient;
-        } while (nextPatient != null);
-    }
+
+
+
 }
+	
